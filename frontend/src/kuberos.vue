@@ -53,7 +53,7 @@ export default {
       return (
         "# Add your user to kubectl\n" +
         'kubectl config set-credentials "' +
-        'user@' + window.location.hostname +
+        'user@' + window.location.hostname.split('.').slice(-2).join('.') +
         '" \\\n' +
         "  --auth-provider=oidc \\\n" +
         '  --auth-provider-arg=client-id="' +
@@ -72,8 +72,8 @@ export default {
         this.kubecfg.issuer +
         '"\n\n' +
         "# Associate your user with an existing cluster\n" +
-        'kubectl config set-context cluster.' + window.location.hostname + ' --cluster cluster.' + window.location.hostname + ' --user="' +
-        'user@' + window.location.hostname +
+        'kubectl config set-context cluster.' + window.location.hostname.split('.').slice(-2).join('.') + ' --cluster cluster.' + window.location.hostname.split('.').slice(-2).join('.') + ' --user="' +
+        'user@' + window.location.hostname.split('.').slice(-2).join('.') +
         '"'
       );
     }
