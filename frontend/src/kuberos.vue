@@ -10,10 +10,6 @@
         <b-col md="10">
           <b-jumbotron>
             <template slot="header">Kuberos</template>
-            <template slot="lead">
-              Save <a :href="templateURL()">this file</a> as <code>~/.kube/config</code>
-              to enable OIDC based <code>kubectl</code> authentication.
-            </template>
           </b-jumbotron>
         </b-col>
         <b-col></b-col>
@@ -22,30 +18,9 @@
       <b-row>
         <b-col></b-col>
         <b-col md="10">
-          <h3>Running <code>kubectl</code></h3>
+          <h3>Authenticate</h3>
           <p>
-            Once you've saved the above <code>~/.kube/config</code> file you should be
-            able to run <code>kubectl</code>:
-          </p>
-          <pre v-highlightjs><code class="bash"># These are examples. Your context and cluster names will likely differ.
-
-$ kubectl config get-contexts
-CURRENT   NAME          CLUSTER                    AUTHINFO   NAMESPACE
-          experimental  experimental.example.org   kuberos
-          prod          prod.example.org           kuberos
-
-$ kubectl --context experimental get namespaces
-NAME          STATUS    AGE
-default       Active    83d
-experimental  Active    15d
-
-$ kubectl --context experimental -n experimental get pods
-NAME                                       READY     STATUS             RESTARTS   AGE
-kuberos-4074452424-06m0b                   1/1       Running            1          6d</code></pre>
-          <h3>Authenticate Manually</h3>
-          <p>
-            If you want to maintain your existing <code>~/.kube/config</code>
-            file you can run the following to add your user:
+          The following will configure authentication for your @ada.support user to the Kubernetes cluster.
           </p>
           <pre v-highlightjs="snippetSetCreds()"><code class="bash"></code></pre>
         </b-col>
@@ -78,7 +53,7 @@ export default {
       return (
         "# Add your user to kubectl\n" +
         'kubectl config set-credentials "' +
-        this.kubecfg.email +
+        'user@' + window.location.hostname +
         '" \\\n' +
         "  --auth-provider=oidc \\\n" +
         '  --auth-provider-arg=client-id="' +
@@ -97,10 +72,8 @@ export default {
         this.kubecfg.issuer +
         '"\n\n' +
         "# Associate your user with an existing cluster\n" +
-        "export CLUSTER=coolcluster\n" +
-        "export CONTEXT=coolcontext\n" +
-        'kubectl config set-context ${CONTEXT} --cluster ${CLUSTER} --user="' +
-        this.kubecfg.email +
+        'kubectl config set-context cluster.' + window.location.hostname + ' --cluster cluster.' + window.location.hostname + ' --user="' +
+        'user@' + window.location.hostname +
         '"'
       );
     }
