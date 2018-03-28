@@ -31,6 +31,13 @@
 </template>
 
 <script>
+var cluster = (function() {
+  if (window.location.hostname.split('.').slice(-3,-2).join('.') !== 'ops') {
+    return window.location.hostname.split('.').slice(-3).join('.')
+  } else {
+    return cluster
+  }
+})();
 export default {
   name: "kuberos",
   metaInfo: {
@@ -46,6 +53,7 @@ export default {
     };
   },
   methods: {
+
     templateURL: function() {
       return "kubecfg.yaml?" + $.param(this.kubecfg);
     },
@@ -53,7 +61,7 @@ export default {
       return (
         "# Add your user to kubectl\n" +
         'kubectl config set-credentials "' +
-        'user@' + window.location.hostname.split('.').slice(-2).join('.') +
+        'user@' + cluster +
         '" \\\n' +
         "  --auth-provider=oidc \\\n" +
         '  --auth-provider-arg=client-id="' +
@@ -72,8 +80,8 @@ export default {
         this.kubecfg.issuer +
         '"\n\n' +
         "# Associate your user with an existing cluster\n" +
-        'kubectl config set-context cluster.' + window.location.hostname.split('.').slice(-2).join('.') + ' --cluster cluster.' + window.location.hostname.split('.').slice(-2).join('.') + ' --user="' +
-        'user@' + window.location.hostname.split('.').slice(-2).join('.') +
+        'kubectl config set-context cluster.' + cluster + ' --cluster cluster.' + cluster + ' --user="' +
+        'user@' + cluster +
         '"'
       );
     }
