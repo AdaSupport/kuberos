@@ -35,7 +35,7 @@ var cluster = (function() {
   if (window.location.hostname.split('.').slice(-3,-2).join('.') !== 'ops') {
     return window.location.hostname.split('.').slice(-3).join('.')
   } else {
-    return cluster
+    return window.location.hostname.split('.').slice(-2).join('.')
   }
 })();
 export default {
